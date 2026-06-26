@@ -2,7 +2,7 @@ import type { Request, Response } from "express";
 import { issueService } from "./issue.service";
 import type { JwtPayload } from "jsonwebtoken";
 import sendResponse from "../../utility/sendResponse";
-import { send } from "node:process";
+
 
 
 
@@ -183,22 +183,26 @@ const deleteIssue = async (req: Request, res: Response)=>{
         const result = await issueService.deleteIssueFromDB(Number(req.params.id))
 
         if(result.rows.length  === 0){
-            return res.status(404).json({
+
+            return sendResponse(res, {
+                statusCode : 404,
                 success: false,
-                message: "Not Found"
+                message:"Not Found"
             })
         }
 
-        return res.status(200).json({
-            success: true,
-            message: "Issue deleted successfully",
-        
-        })        
+        return sendResponse(res, {
+            statusCode: 200,
+            success: true, 
+             message: "Issue deleted successfully",
+        })
         
     } catch (error: any) {
-        return res.status(404).json({
+
+        return sendResponse(res, {
+            statusCode: 500,
             success: false,
-            message: error.message,
+            message: error.message
         })
         
     }

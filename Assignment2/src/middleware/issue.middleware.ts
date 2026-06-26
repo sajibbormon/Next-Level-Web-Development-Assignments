@@ -55,7 +55,7 @@ const issueMiddleware = (...roles: any) => {
                 if(!(issueData.rows[0].reporter_id === user.id)){
                     res.status(403).json({
                         success: false,
-                        message: "Forbidden."
+                        message: "Forbidden"
                     })
                 }
             }
@@ -65,7 +65,7 @@ const issueMiddleware = (...roles: any) => {
   
                     res.status(403).json({
                         success: false,
-                        message: "Forbidden."
+                        message: "Forbidden"
                     })
         
             }

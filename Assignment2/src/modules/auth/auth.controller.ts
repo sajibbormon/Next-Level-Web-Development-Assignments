@@ -1,23 +1,27 @@
 import type { Request, Response } from "express";
 import { authService } from "./auth.service";
 import { success } from "zod";
+import sendResponse from "../../utility/sendResponse";
 
 
 const signupUser = async (req: Request, res: Response) => {
     try {
         const result = await authService.signupToDB(req.body);
 
-        return res.status(201).json({
+        return sendResponse(res, {
+            statusCode: 201,
             success: true,
             message: "User registered successfully",
             data: result.rows[0]
         })
 
     } catch (error: any) {
-        return res.status(500).json({
+
+        return sendResponse(res, {
+            statusCode: 400,
             success: false,
-            message: error.message,
-        });
+            message: error.message
+        })
     }
 }
 
@@ -25,16 +29,19 @@ const loginUser = async (req: Request, res: Response) => {
     try {
         const result = await authService.loginUserIntoDB(req.body);
 
-        return res.status(200).json({
+        return sendResponse(res, {
+            statusCode: 200,
             success: true,
             message: "Login successful",
             data: result
         })
 
     } catch (error: any) {
-        return res.status(401).json({
+
+        return sendResponse(res, {
+            statusCode: 401,
             success: false,
-            message: error.message,
+            message: error.message
         })
     }
 }
