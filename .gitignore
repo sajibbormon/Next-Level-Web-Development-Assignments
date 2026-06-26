@@ -1,0 +1,7 @@
+# Ignore environment variables
+.env
+
+# Ignore Node.js modules and logs
+# node_modules/
+# npm-debug.log
+# yarn-debug.log
