@@ -5,3 +5,9 @@ export interface IIssue {
  status?: "open" | "in_progress" | "resolved" ;
 
 }
+
+export interface IUser {
+  id: number;
+  name: string;
+  role: string;
+}

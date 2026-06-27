@@ -3,7 +3,7 @@ import type { NextFunction, Request, Response } from "express"
 import jwt, { type JwtPayload } from "jsonwebtoken"
 import config from "../config";
 import { pool } from "../db";
-import { success } from "zod";
+
 
 
 
@@ -16,7 +16,7 @@ const issueMiddleware = (...roles: any) => {
             if (!token) {
                 res.status(401).json({
                     success: false,
-                    message: "Unauthorized access!",
+                    message: "Unauthorized",
 
                 });
             }
@@ -31,7 +31,7 @@ const issueMiddleware = (...roles: any) => {
             if (userData.rows.length === 0) {
                 res.status(404).json({
                     success: false,
-                    message: "User not found!",
+                    message: "User not found",
 
                 });
             }
@@ -46,13 +46,14 @@ const issueMiddleware = (...roles: any) => {
                 });
             }
 
+            
 
-            if ( req.method == "PUT" && user.role === "contributor"  && (req.params.id)) {
+            if ( req.method == "PATCH" && user.role === "contributor"  && (req.params.id)) {
                 const issueData = await pool.query(`
                 SELECT * FROM issues WHERE id=$1
                 `, [req.params.id])
 
-                if(!(issueData.rows[0].reporter_id === user.id)){
+                if(!(issueData.rows[0].reporter_id === user.id) || !(issueData.rows[0].status === "open")){
                     res.status(403).json({
                         success: false,
                         message: "Forbidden"

@@ -70,7 +70,10 @@ const loginUserIntoDB = async (payload: { email: string, password: string }) => 
 
 }
 
+
+
 export const authService = {
    signupToDB,
    loginUserIntoDB,
+
 }

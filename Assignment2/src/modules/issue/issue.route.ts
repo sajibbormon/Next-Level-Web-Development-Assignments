@@ -13,7 +13,7 @@ router.get("/issues", issueMiddleware(USER_ROLE.contributor , USER_ROLE.maintain
 
 router.get("/issues/:id", issueMiddleware(USER_ROLE.contributor , USER_ROLE.maintainer), issueController.getSingleIssue)
 
-router.put("/issues/:id", issueMiddleware(USER_ROLE.contributor , USER_ROLE.maintainer), issueController.updateIssue )
+router.patch("/issues/:id", issueMiddleware(USER_ROLE.contributor , USER_ROLE.maintainer), issueController.updateIssue )
 
 router.delete("/issues/:id", issueMiddleware(USER_ROLE.contributor , USER_ROLE.maintainer), issueController.deleteIssue)
 

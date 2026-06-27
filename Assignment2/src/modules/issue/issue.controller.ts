@@ -39,58 +39,100 @@ const createIssue = async (req: Request, res: Response) => {
 }
 
 
+// const getAllIssues = async (req: Request, res: Response) => {
+//     try {
+
+//         const { sort = 'newest', type, status } = req.query;
+
+//         let queryText = `SELECT 
+//                         i.id, 
+//                         i.title, 
+//                         i.description, 
+//                         i.type, 
+//                         i.status, 
+//                         json_build_object(
+//                             'id', u.id,
+//                             'name', u.name,
+//                             'role', u.role
+//                         ) AS reporter,
+//                         i.created_at, 
+//                         i.updated_at
+//                         FROM issues i
+//                         JOIN users u ON i.reporter_id = u.id
+//                         `;
+
+//         const conditions: string[] = [];
+//         const values: any[] = [];
+
+//         if (type === 'bug' || type === 'feature_request') {
+//             values.push(type);
+
+//             conditions.push(`type = $${values.length}`);
+//         }
+
+//         if (status === 'open' || status === 'in_progress' || status === 'resolved') {
+//             values.push(status);
+//             conditions.push(`status = $${values.length}`);
+//         }
+
+
+//         if (conditions.length > 0) {
+//             queryText += ' WHERE ' + conditions.join(' AND ');
+//         }
+
+
+//         if (sort === 'oldest') {
+//             queryText += ' ORDER BY created_at ASC';
+//         } else {
+//             queryText += ' ORDER BY created_at DESC';
+//         }
+
+
+//         const result = await issueService.getAllIssuesFromDB(queryText, values);
+
+//         if(result.rows.length  === 0){
+
+//             return sendResponse(res, {
+//                 statusCode: 404,
+//                 success: false,
+//                 message: "Not Found",
+                
+//             })
+//         }
+
+
+//         return sendResponse(res, {
+//             statusCode: 200,
+//             success: true,
+//             message: "Issues retrived successfully",
+//             data: result.rows
+//         })
+
+
+//     } catch (error: any) {
+
+//         return sendResponse(res, {
+//             statusCode: 404,
+//             success: false,
+//             message: error.message,
+//         })
+//     }
+// }
+
+
+
+
+
+
+
 const getAllIssues = async (req: Request, res: Response) => {
     try {
 
-        const { sort = 'newest', type, status } = req.query;
+        const { sort, type, status } = req.query;
 
-        let queryText = `SELECT 
-                        i.id, 
-                        i.title, 
-                        i.description, 
-                        i.type, 
-                        i.status, 
-                        json_build_object(
-                            'id', u.id,
-                            'name', u.name,
-                            'role', u.role
-                        ) AS reporter,
-                        i.created_at, 
-                        i.updated_at
-                        FROM issues i
-                        JOIN users u ON i.reporter_id = u.id
-                        `;
+        const result = await issueService.getAllIssuesFromDB(sort as string, type as string, status as string);
 
-        const conditions: string[] = [];
-        const values: any[] = [];
-
-        if (type === 'bug' || type === 'feature_request') {
-            values.push(type);
-
-            conditions.push(`type = $${values.length}`);
-        }
-
-        if (status === 'open' || status === 'in_progress' || status === 'resolved') {
-            values.push(status);
-            conditions.push(`status = $${values.length}`);
-        }
-
-
-        if (conditions.length > 0) {
-            queryText += ' WHERE ' + conditions.join(' AND ');
-        }
-
-
-        if (sort === 'oldest') {
-            queryText += ' ORDER BY created_at ASC';
-        } else {
-            queryText += ' ORDER BY created_at DESC';
-        }
-
-
-        const result = await issueService.getAllIssuesFromDB(queryText, values);
-
-        if(result.rows.length  === 0){
+        if(result.length  === 0){
 
             return sendResponse(res, {
                 statusCode: 404,
@@ -104,8 +146,8 @@ const getAllIssues = async (req: Request, res: Response) => {
         return sendResponse(res, {
             statusCode: 200,
             success: true,
-            message: "Issues retrived successfully",
-            data: result.rows
+            message: "Issues retrived successfully...",
+            data: result
         })
 
 
@@ -119,11 +161,17 @@ const getAllIssues = async (req: Request, res: Response) => {
     }
 }
 
+
+
+
+
+
+
 const getSingleIssue = async (req: Request, res: Response) => {
     try {
         const result = await issueService.getSingleIssueFromDB(Number(req.params.id))
 
-        if(result.rows.length  === 0){
+        if(result.length  === 0){
             return sendResponse(res, {
                 statusCode: 404,
                 success: false,
@@ -135,7 +183,7 @@ const getSingleIssue = async (req: Request, res: Response) => {
             statusCode: 200,
             success: true,
             message: "Issue retrived successfully",
-            data: result.rows[0]
+            data: result
         })
     } catch (error: any) {
         return sendResponse(res, {
