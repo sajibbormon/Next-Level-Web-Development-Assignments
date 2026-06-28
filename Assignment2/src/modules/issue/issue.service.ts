@@ -104,6 +104,10 @@ const getSingleIssueFromDB = async (id: number) => {
 
         const issue = issueResult.rows[0];
 
+        if(!issue){
+            throw new Error("Not Found");
+        }
+
         const reporterResult = await pool.query(`SELECT id, name, role FROM users WHERE id = $1`,[issue.reporter_id]);
 
         const reporter = reporterResult.rows[0] || null;
@@ -121,6 +125,7 @@ const getSingleIssueFromDB = async (id: number) => {
 
 const updateIssueIntoDB = async (payload: IIssue, id: number) => {
     const { title, description, type } = payload;
+
     const result = await pool.query(`
         UPDATE issues SET
         title=COALESCE($1, title),
@@ -131,6 +136,10 @@ const updateIssueIntoDB = async (payload: IIssue, id: number) => {
         WHERE id=$4
         RETURNING *
         `, [title, description, type,  id])
+
+    if(result.rows.length === 0){
+         throw new Error("Not Found");
+    }
 
     return result;
 }

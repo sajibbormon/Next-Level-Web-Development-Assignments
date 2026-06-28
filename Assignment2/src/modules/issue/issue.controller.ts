@@ -96,7 +96,7 @@ const createIssue = async (req: Request, res: Response) => {
 //                 statusCode: 404,
 //                 success: false,
 //                 message: "Not Found",
-                
+
 //             })
 //         }
 
@@ -132,13 +132,13 @@ const getAllIssues = async (req: Request, res: Response) => {
 
         const result = await issueService.getAllIssuesFromDB(sort as string, type as string, status as string);
 
-        if(result.length  === 0){
+        if (result.length === 0) {
 
             return sendResponse(res, {
                 statusCode: 404,
                 success: false,
                 message: "Not Found",
-                
+
             })
         }
 
@@ -171,7 +171,7 @@ const getSingleIssue = async (req: Request, res: Response) => {
     try {
         const result = await issueService.getSingleIssueFromDB(Number(req.params.id))
 
-        if(result.length  === 0){
+        if (result.length === 0) {
             return sendResponse(res, {
                 statusCode: 404,
                 success: false,
@@ -198,8 +198,8 @@ const getSingleIssue = async (req: Request, res: Response) => {
 const updateIssue = async (req: Request, res: Response) => {
     try {
         const result = await issueService.updateIssueIntoDB(req.body, Number(req.params.id))
-        
-        if(result.rows.length  === 0){
+
+        if (result.rows.length === 0) {
 
             return sendResponse(res, {
                 statusCode: 404,
@@ -207,7 +207,7 @@ const updateIssue = async (req: Request, res: Response) => {
                 message: "Not Found"
             })
         }
-        
+
 
         return sendResponse(res, {
             statusCode: 200,
@@ -226,25 +226,27 @@ const updateIssue = async (req: Request, res: Response) => {
     }
 }
 
-const deleteIssue = async (req: Request, res: Response)=>{
+const deleteIssue = async (req: Request, res: Response) => {
     try {
         const result = await issueService.deleteIssueFromDB(Number(req.params.id))
 
-        if(result.rows.length  === 0){
+        console.log(result);
+
+        if (result.rows.length === 0) {
 
             return sendResponse(res, {
-                statusCode : 404,
+                statusCode: 404,
                 success: false,
-                message:"Not Found"
+                message: "Not Found"
             })
         }
 
         return sendResponse(res, {
             statusCode: 200,
-            success: true, 
-             message: "Issue deleted successfully",
+            success: true,
+            message: "Issue deleted successfully",
         })
-        
+
     } catch (error: any) {
 
         return sendResponse(res, {
@@ -252,7 +254,7 @@ const deleteIssue = async (req: Request, res: Response)=>{
             success: false,
             message: error.message
         })
-        
+
     }
 }
 
