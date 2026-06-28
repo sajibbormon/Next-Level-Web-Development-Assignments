@@ -86,14 +86,14 @@ const issueMiddleware = (...roles: any) => {
                 `, [req.params.id])
 
                 if (issueData.rowCount === 0) {
-                    sendResponse(res, {
+                    return sendResponse(res, {
                         statusCode: 404,
                         success: false,
                         message: "Not Found"
                     })
                 }
 
-            } else if(req.method === "DELETE" && user.role !== "maintainer") {
+            } else if(req.method === "DELETE" && user.role === "contributor") {
                 return sendResponse(res, {
                     statusCode: 403,
                     success: false,
@@ -108,7 +108,6 @@ const issueMiddleware = (...roles: any) => {
 
         } catch (error: any) {
             if (error.name === 'TokenExpiredError') {
-                // console.warn(`[Auth] Token expired for ${req.method} ${req.originalUrl}`);
 
                 return sendResponse(res, {
                     statusCode: 401,

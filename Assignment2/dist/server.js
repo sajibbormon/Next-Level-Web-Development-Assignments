@@ -199,7 +199,7 @@ var createIssueIntoDB = async (payload, reporter_id) => {
   const { title, description, type, status } = payload;
   const allTypes = ["bug", "feature_request"];
   if (!allTypes.includes(type)) {
-    throw new Error("Invalid type!");
+    throw new Error("Bad Request");
   }
   const result = await pool.query(`
         INSERT INTO issues (title, description, type, status, reporter_id)
@@ -290,9 +290,6 @@ var deleteIssueFromDB = async (id) => {
   const result = await pool.query(`
         DELETE FROM issues WHERE id=$1 RETURNING id
         `, [id]);
-  if (result.rows.length === 0) {
-    throw new Error("Not Found");
-  }
   return result;
 };
 var issueService = {
@@ -401,7 +398,7 @@ var deleteIssue = async (req, res) => {
   try {
     const result = await issueService.deleteIssueFromDB(Number(req.params.id));
     console.log(result);
-    if (result.rows.length === 0) {
+    if (result.rowCount === 0) {
       return sendResponse_default(res, {
         statusCode: 404,
         success: false,
@@ -485,13 +482,13 @@ var issueMiddleware = (...roles) => {
                 SELECT * FROM issues WHERE id=$1
                 `, [req.params.id]);
         if (issueData.rowCount === 0) {
-          sendResponse_default(res, {
+          return sendResponse_default(res, {
             statusCode: 404,
             success: false,
             message: "Not Found"
           });
         }
-      } else {
+      } else if (req.method === "DELETE" && user.role === "contributor") {
         return sendResponse_default(res, {
           statusCode: 403,
           success: false,

@@ -16,7 +16,7 @@ const createIssueIntoDB = async (payload: IIssue, reporter_id: number) => {
 
 
     if (!allTypes.includes(type)) {
-        throw new Error("Invalid type!");
+        throw new Error("Bad Request");
     }
 
 
@@ -150,10 +150,6 @@ const deleteIssueFromDB = async (id: number) => {
     const result = await pool.query(`
         DELETE FROM issues WHERE id=$1 RETURNING id
         `, [id])
-
-    if (result.rows.length === 0) {
-        throw new Error("Not Found")
-    }
 
     return result;
 
