@@ -61,7 +61,7 @@ const getAllIssues = async (req: Request, res: Response) => {
         return sendResponse(res, {
             statusCode: 200,
             success: true,
-            message: "Issues retrived successfully...",
+            message: "Issues retrived successfully",
             data: result
         })
 
@@ -145,7 +145,7 @@ const deleteIssue = async (req: Request, res: Response) => {
     try {
         const result = await issueService.deleteIssueFromDB(Number(req.params.id))
 
-        console.log(result);
+        // console.log(result);
 
         if (result.rowCount === 0) {
 

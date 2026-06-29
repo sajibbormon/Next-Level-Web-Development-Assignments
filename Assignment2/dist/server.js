@@ -193,8 +193,6 @@ var logger_middleware_default = logger;
 import { Router as Router2 } from "express";
 
 // src/modules/issue/issue.service.ts
-import "fs";
-import "jsonwebtoken";
 var createIssueIntoDB = async (payload, reporter_id) => {
   const { title, description, type, status } = payload;
   const allTypes = ["bug", "feature_request"];
@@ -335,7 +333,7 @@ var getAllIssues = async (req, res) => {
     return sendResponse_default(res, {
       statusCode: 200,
       success: true,
-      message: "Issues retrived successfully...",
+      message: "Issues retrived successfully",
       data: result
     });
   } catch (error2) {
@@ -397,7 +395,6 @@ var updateIssue = async (req, res) => {
 var deleteIssue = async (req, res) => {
   try {
     const result = await issueService.deleteIssueFromDB(Number(req.params.id));
-    console.log(result);
     if (result.rowCount === 0) {
       return sendResponse_default(res, {
         statusCode: 404,
@@ -427,7 +424,7 @@ var issueController = {
 };
 
 // src/middleware/issue.middleware.ts
-import jwt3 from "jsonwebtoken";
+import jwt2 from "jsonwebtoken";
 var issueMiddleware = (...roles) => {
   return async (req, res, next) => {
     try {
@@ -439,7 +436,7 @@ var issueMiddleware = (...roles) => {
           message: "Unauthorized"
         });
       }
-      const decoded = jwt3.verify(token, config_default.jwt_secret);
+      const decoded = jwt2.verify(token, config_default.jwt_secret);
       const userData = await pool.query(`
                 SELECT * FROM users WHERE email=$1
                 `, [decoded.email]);

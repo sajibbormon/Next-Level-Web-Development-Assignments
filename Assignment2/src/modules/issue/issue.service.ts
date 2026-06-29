@@ -1,7 +1,7 @@
-import { stat } from "node:fs";
+
 import { pool } from "../../db";
 import type { IIssue, IUser } from "./issue.interface";
-import jwt, { type JwtPayload } from 'jsonwebtoken'
+
 
 
 const createIssueIntoDB = async (payload: IIssue, reporter_id: number) => {
