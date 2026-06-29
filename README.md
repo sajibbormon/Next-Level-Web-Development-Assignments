@@ -68,23 +68,23 @@ An Issue Tracking and Management API built with Node.js, Express, TypeScript, an
 
 ### 4. Get All Issues
 * **Endpoint:** `GET /api/issues`
-* **Access:** Public
+* **Access:** Authenticated users
 * **Query Parameters:** `sort` (newest/oldest), `type`, `status`.
-* **Description:** Retrieve all issues. Dynamically handles sorting and filtering. Includes the nested `reporter` object in the response via batched querying.
+* **Description:** Retrieve all issues and only authenticate users can access.
 
 ### 5. Get Single Issue
 * **Endpoint:** `GET /api/issues/:id` 
-* **Access:** Public
-* **Description:** Retrieve a single issue by its ID, complete with hydrated nested reporter details.
+* **Access:** Authenticated users
+* **Description:** Retrieve a single issue by its ID, only authenticate users can access.
 
 ### 6. Update Issue
 * **Endpoint:** `PATCH /api/issues/:id`
 * **Access:** Authenticated users
-* **Description:** Dynamically apply partial updates to an issue (e.g., updating just the `status` to `in_progress`). Updates the `updated_at` timestamp.
+* **Description:** Dynamically apply partial updates to an issue (Maintainer can update all issues. Contributer can update own issue only if the `status` = `open` ).
 
 ### 7. Delete Issue
 * **Endpoint:** `DELETE /api/issues/:id`
-* **Access:** Authenticated users (Requires validation checking)
+* **Access:** Authenticated users (Only Maintainer)
 * **Description:** Safely remove an issue from the database. Will return a 404 error if the issue does not exist.
 
 ---
