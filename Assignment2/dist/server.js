@@ -305,7 +305,7 @@ var createIssue = async (req, res) => {
     const user_id = user.id;
     const result = await issueService.createIssueIntoDB(req.body, user_id);
     return sendResponse_default(res, {
-      statusCode: 200,
+      statusCode: 201,
       success: true,
       message: "Issue created successfully",
       data: result.rows[0]

@@ -20,7 +20,7 @@ const createIssue = async (req: Request, res: Response) => {
 
 
         return sendResponse(res, {
-            statusCode: 200,
+            statusCode: 201,
             success: true,
             message: "Issue created successfully",
             data: result.rows[0]
